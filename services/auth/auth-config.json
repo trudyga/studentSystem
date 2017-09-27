@@ -1,0 +1,6 @@
+{
+  "jwtSecret": "That2loose",
+  "jwtSession": {
+    "session": false
+  }
+}
