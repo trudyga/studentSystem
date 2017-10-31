@@ -1,0 +1,32 @@
+<h3>Add new student's affair</h3>
+<form [formGroup]="affairAddForm">
+  <div class="form-group">
+    <label for="ticket">
+      Ticket
+    </label>
+    <input type="text" class="form-control" id="ticket" name="ticket" formControlName="ticket">
+  </div>
+  <div class="form-group">
+    <label for="name">
+      First Name
+    </label>
+    <input type="text" class="form-control" id="name" name="name" formControlName="name">
+  </div>
+  <div class="form-group">
+    <label for="surname">
+      Last Name
+    </label>
+    <input type="text" class="form-control" id="surname" name="surname" formControlName="surname">
+  </div>
+  <div class="form-group">
+    <label for="fatherName">
+      Father Name
+    </label>
+    <input type="text" class="form-control" id="fatherName" name="fatherName" formControlName="fatherName">
+  </div>
+  <div class="form-group">
+    <button type="submit" class="btn btn-primary pull-right" (click)="createAffair($event)" [disabled]="affairAddForm.invalid">
+      <i class="fa fa-plus" aria-hidden="true"></i>
+    </button>
+  </div>
+</form>

@@ -1,0 +1,35 @@
+version: '3'
+services:
+    angular:
+      container_name: "studentsSystem_client"
+      build: ./angular-client
+      ports:
+        - "4200:4200"
+        - "49153:49153"
+      volumes:
+        - ./angular-client:/usr/app
+      depends_on:
+        - mongodb
+        - myapp
+    myapp:
+        container_name: "studentsSystem"
+        build: ./express-server
+        environment:
+            MONGO_PORT: studentsSystem_mongo:27018/studentsSystem
+            DEBUG: student-system:*
+            PORT: 3080
+        ports:
+            - 3080:3080
+        links:
+            - mongodb
+        depends_on:
+            - mongodb
+        command: ["node", "app.js"]
+    mongodb:
+        image: mongo:latest
+        container_name: "studentsSystem_mongo"
+        expose:
+            - "27018"
+        ports:
+            - 27018:27018
+        command: mongod --port 27018

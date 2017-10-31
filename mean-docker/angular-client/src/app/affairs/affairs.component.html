@@ -1,0 +1,42 @@
+<div class="row">
+  <h2 class="text-center">Students affairs</h2>
+  <table class="table table-hover table-responsive col-xs-12 w-100 d-block d-sm-table center-block">
+    <caption>
+      All student's affairs registered in the system
+    </caption>
+    <thead>
+    <tr>
+      <th>#Ticket</th>
+      <th>Name</th>
+      <th>Surname</th>
+      <th>FatherName</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="affair" *ngFor="let affair of affairs" (click)="selectAffair(affair, $event)"
+      [ngClass]="{'selected': affair.selected}">
+      <td>{{affair.ticket}}</td>
+      <td>{{affair.name}}</td>
+      <td>{{affair.surname}}</td>
+      <td>{{affair.fatherName}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div class="btn-group pull-right">
+  <a class="btn btn-link pull-right" routerLink="/affairs/add">
+    <i class="fa fa-plus" aria-hidden="true"></i>
+    Add
+  </a>
+  <a class="btn btn-link pull-right" routerLink="/affairs/edit">
+    <i class="fa fa-pencil" aria-hidden="true"></i>
+    Edit
+  </a>
+  <button type="button" class="btn btn-link pull-right" (click)="deleteAffair($event)">
+    <i class="fa fa-trash-o" aria-hidden="true"></i>
+    Remove
+  </button>
+</div>
+<router-outlet>
+
+</router-outlet>
