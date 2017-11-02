@@ -22,7 +22,7 @@ module.exports = function () {
 
                 let payload = {
                     login,
-                    password
+                    password: check.hash
                 };
                 let token = jwt.encode(payload, jwtConfig.jwtSecret);
                 debug("Token: " + token);

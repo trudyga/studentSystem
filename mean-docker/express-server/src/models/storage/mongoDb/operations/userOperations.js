@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const userSchema = require('../schemas/userSchema');
 const User = mongoose.model('Users', userSchema);
 
+const encryptService = require('../../../../services/auth/pass.encrypt.service');
+
 /**
  * Register new user in the db
  * @param userObj
@@ -16,6 +18,10 @@ module.exports.create = function (userObj = {}) {
     });
 };
 
+/**
+ * Get All users from the system
+ * @returns {Promise|Array|{index: number, input: string}} - users list
+ */
 module.exports.getAll = function () {
     return User.find({})
         .exec();
@@ -45,7 +51,6 @@ module.exports.authenticate = function (login, password) {
     })
         .exec()
         .then(user => {
-            console.log(`${user && user.password} === ${password}`);
             if (!user)
                 return {
                     check: false,
@@ -53,9 +58,15 @@ module.exports.authenticate = function (login, password) {
                     message: "Login is not correct"
                 };
 
-            if (user.password === password) {
+            let hash = encryptService.hashPassword(password,
+                user.password.salt).hash;
+
+            console.log(`${user && user.password.hash} === ${hash}`);
+
+            if (user.password.hash === hash) {
                 return {
                     check: true,
+                    hash,
                     login: login
                 };
             } else {

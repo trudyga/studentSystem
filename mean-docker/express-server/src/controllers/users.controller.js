@@ -4,6 +4,8 @@ const UsersModel = mongoose.model('Users');
 const User = require('../models/entities/user');
 const debug = require('debug')('student-system:users');
 
+const encryptService = require('../services/auth/pass.encrypt.service');
+
 
 module.exports = function() {
     /**
@@ -69,6 +71,10 @@ module.exports = function() {
             && user.fatherName
             && user.phone
             && user.department) {
+
+            user.password = encryptService.hashPassword(user.password);
+
+            debug(user);
 
             let u = new UsersModel(user);
 
