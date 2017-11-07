@@ -1,0 +1,43 @@
+<div class="row">
+  <form [formGroup]="reportForm" class="col-xs-12 col-sm-12 col-lg-12">
+    <div class="form-group">
+      <label for="type">
+        Type
+      </label>
+      <select class="form-control" id="type" name="type" formControlName="type">
+        <option name="Affairs Overview" value="Affairs Overview">Affairs Overview</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="title" class="col-xs-12 col-sm-12">
+        Enter title
+      </label>
+      <input class="from-control col-xs-12 col-sm-12" id="title" name="title" formControlName="title"/>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary pull-right col-xs-12 col-sm-12" (click)="createReport($event)" [disabled]="reportForm.invalid">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </button>
+    </div>
+  </form>
+</div>
+<br/>
+<hr/>
+<div class="list-group">
+  <div class="list-group-item list-group-item-action" *ngFor="let report of reports">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <h3 class="col-xs-12 col-sm-6">{{report.title}}</h3>
+      <p class="col-xs-12 col-sm-offset-6 col-sm-6">#<strong>{{report.type}}</strong></p>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <p>{{report.content}}</p>
+      <div class="col-xs-12 col-sm-12">
+        <button class="btn btn-link" (click)="removeReport(report)">
+          <i class="fa fa-trash-o" aria-hidden="true"></i>
+          Remove
+        </button>
+        <i class="pull-right">{{report.updatedAt}}</i>
+      </div>
+    </div>
+  </div>
+</div>

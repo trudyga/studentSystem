@@ -21,6 +21,13 @@ export default class AffairsHttpService {
       .map(removedAffair => removedAffair.json());
   }
 
+  updateAffair(ticket: string, affairData: any) {
+    console.log('Update affair');
+    console.log(`${this.apiEndpoint}/affairs/${ticket}`);
+    return this.http.put(`${this.apiEndpoint}/affairs/${ticket}`, affairData)
+      .map(updatedAffair => updatedAffair.json());
+  }
+
   getAffair(ticket: string): Observable<any> {
     return this.http.get(`${this.apiEndpoint}/affairs/${ticket}`)
       .map(affairJson => affairJson.json());

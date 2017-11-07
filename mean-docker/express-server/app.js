@@ -17,6 +17,7 @@ const debug = require('debug')('students-system:app');
 const users = require('./src/routes/users');
 const affairs = require('./src/routes/affairs');
 const session = require('./src/routes/sessions');
+const reports = require('./src/routes/reports');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -39,6 +40,7 @@ app.set('view engine', 'pug');
 app.use('/users', users);
 app.use('/session', session);
 app.use('/affairs', affairs);
+app.use('/reports', reports);
 
 
 app.get('/', function (req,res) {

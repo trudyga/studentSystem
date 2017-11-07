@@ -14,17 +14,18 @@ export class AffairsComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private affairsHttpService: AffairsHttpService,
               private affairsService: AffairsService) {
-    this.affairsService.affairs$.subscribe(
-      affairs => this.affairs = affairs
-    );
 
-    this.affairsHttpService.getAffairs()
-      .subscribe(affairs => {
+    this.affairsService.affairs$.subscribe(affairs => {
+        console.log('Get affairs');
         this.affairs = affairs;
       });
   }
 
   ngOnInit() {
+    this.affairsHttpService.getAffairs()
+      .subscribe(affairs => {
+        this.affairs = affairs;
+      });
   }
 
   selectAffair(affair, $event) {
@@ -32,22 +33,18 @@ export class AffairsComponent implements OnInit {
     console.log(affair.selected);
     console.log(this.affairs);
     affair.selected = !affair.selected;
-  }
-
-  isAffairSelected(affair) {
-    return affair.selected;
+    if (affair.selected)
+      this.affairsService.addToSelected(affair);
+    else
+      this.affairsService.removeFromSelected(affair.ticket);
   }
 
   deleteAffair($event) {
     $event.preventDefault();
 
-    this.affairs.filter(affair => affair.selected)
+    return this.affairs.filter(affair => affair.selected)
       .forEach(affair => {
-        console.log(affair);
-        console.log('Remove affair');
-        this.affairsHttpService.removeAffair(affair.ticket);
+        this.affairsService.removeAffair(affair.ticket).subscribe((res) => {});
       });
-
-    this.affairs = this.affairs.filter(affair => !affair.selected);
   }
 }

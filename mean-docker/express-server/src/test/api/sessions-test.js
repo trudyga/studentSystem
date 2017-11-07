@@ -12,13 +12,22 @@ const authConfig = require('../../services/auth/auth-config.json');
 
 let db = require('../../models/storage');
 const User = require('../../models/entities/user');
+const encryptService = require('../../services/auth/pass.encrypt.service');
 
 chai.use(chaiHttp);
 
 describe('/session/', function () {
     let user = require('./examples/user.json');
+    let hashedPassword = encryptService.hashPassword(user.password);
+    let initialPassword = user.password;
+
     beforeEach('Remove all users', function () {
-       return db.users.deleteAll();
+        user.password = hashedPassword;
+        return db.users.deleteAll();
+    });
+
+    afterEach('Restore user object', function() {
+        user.password = initialPassword;
     });
 
     describe('POST', function () {
@@ -51,7 +60,7 @@ describe('/session/', function () {
                .post('/session')
                .send({
                    login: user.login,
-                   password: user.password
+                   password: initialPassword
                })
                .then(res => {
                    let token = res.body.token;
@@ -59,7 +68,7 @@ describe('/session/', function () {
                    let payload = jwt.decode(token, authConfig.jwtSecret);
                    payload.should.be.deep.equal({
                        login: user.login,
-                       password: user.password
+                       password: user.password.hash
                    });
                });
         });

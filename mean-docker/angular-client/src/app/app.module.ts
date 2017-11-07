@@ -18,9 +18,10 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { AuthGuard } from "../_guards/auth-guard.guard";
 import { AffairAddComponent } from './affair-add/affair-add.component';
 import { AffairEditComponent } from './affair-edit/affair-edit.component';
+import { ReportsComponent } from './reports/reports.component';
 import AffairsHttpService from "../_services/affairs.http.service";
 import AffairsService from "../_services/affairs.service";
-
+import ReportsHttpService from "../_services/reports.http.service";
 
 const appRoutes: Routes = [
   {
@@ -39,7 +40,7 @@ const appRoutes: Routes = [
   {
     canActivate: [AuthGuard],
     path: 'reports',
-    redirectTo: 'in-development'
+    component: ReportsComponent
   },
   {
     path: 'signIn',
@@ -73,7 +74,8 @@ const ApiEndpoint = 'http://localhost:3080';
     SignUpComponent,
     SignInComponent,
     AffairAddComponent,
-    AffairEditComponent
+    AffairEditComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserModule,
@@ -100,6 +102,9 @@ const ApiEndpoint = 'http://localhost:3080';
     },
     {
       provide: AffairsService, useClass: AffairsService
+    },
+    {
+      provide: ReportsHttpService, useClass: ReportsHttpService
     }
   ],
   entryComponents: [

@@ -27,11 +27,15 @@ module.exports.update = function (ticket, affairObj) {
         ticket: ticket
     };
     let update = {
-        $set: affairObj
+        $set: {
+            name: affairObj.name,
+            surname: affairObj.surname,
+            fatherName: affairObj.fatherName
+        }
     };
 
     return new Promise((resolve, reject) => {
-        Affair.update(query, update, {multi: true}, function (err, affair) {
+        Affair.update(query, update, {multi: false}, function (err, affair) {
             if(err) reject(err);
             resolve(affair);
         });

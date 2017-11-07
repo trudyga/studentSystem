@@ -11,6 +11,7 @@ import AffairsService from "../../_services/affairs.service";
 export class AffairEditComponent implements OnInit {
   affairEditForm: FormGroup;
   affairs: any[];
+  private currentAffair: any;
 
   constructor(private fb: FormBuilder, private affairsService: AffairsService) {
     this.affairEditForm = fb.group({
@@ -19,15 +20,27 @@ export class AffairEditComponent implements OnInit {
       fatherName: ['', Validators.required]
     });
 
-    this.affairs = this.affairsService.affairs;
+    this.affairsService.selectedAffairs$.subscribe(affairs => {
+      console.log('An affair was selected');
+      console.log(affairs);
+      this.affairs = affairs;
+      this.currentAffair = this.affairs ? this.affairs[0] : null;
+      if (!this.currentAffair) {
+        this.affairEditForm.controls['name'].setValue('');
+        this.affairEditForm.controls['surname'].setValue('');
+        this.affairEditForm.controls['fatherName'].setValue('');
+        return;
+      }
+
+      this.affairEditForm.controls['name'].setValue(this.currentAffair.name);
+      this.affairEditForm.controls['surname'].setValue(this.currentAffair.surname);
+      this.affairEditForm.controls['fatherName'].setValue(this.currentAffair.fatherName);
+    });
   }
 
   ngOnInit() {
   }
 
-  get ticket() {
-    return this.affairEditForm.get('ticket');
-  }
   get name() {
     return this.affairEditForm.get('name');
   }
@@ -38,9 +51,12 @@ export class AffairEditComponent implements OnInit {
     return this.affairEditForm.get('fatherName');
   }
 
-  createAffair($event) {
+  editAffair($event) {
     $event.preventDefault();
-
-    return this.affairsService.createAffair(this.affairEditForm.value);
+    $event.stopPropagation();
+    console.log('Update affair value');
+    console.log(this.affairEditForm.value);
+    return this.affairsService.editAffair(this.currentAffair.ticket, this.affairEditForm.value)
+      .subscribe(() => {});
   }
 }

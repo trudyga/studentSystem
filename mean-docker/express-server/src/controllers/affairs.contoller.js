@@ -1,6 +1,6 @@
 const affairs = require('../models/storage').affairs;
 const Affair = require('../models/entities/affair');
-const debug = require('debug')('student-system:users');
+const debug = require('debug')('student-system:affairs');
 
 
 module.exports = function () {
@@ -42,6 +42,54 @@ module.exports = function () {
         } else {
             res.statusCode = 400;
             res.send({message: "Not all fields specified"});
+        }
+    }
+
+    /**
+     * Modify existing student affair, registered in the system
+     * @param req
+     * @param {String} req.params.ticket    - Serial number of the student ticket
+     * @param {String} req.body.name        - First name of the student
+     * @param {String} req.body.surname     - Last name of the student
+     * @param {String} req.body.fatherName  - Middle name of the student
+     * @param res
+     * @param next
+     * @returns {Promise|Promise.<Affair>}
+     */
+    function updateAffair(req, res, next) {
+        let body = req.body;
+        let ticket = req.params.ticket;
+
+        console.log('Update affair body');
+        console.log(body);
+
+        if (ticket
+            && body.name
+            && body.surname
+            && body.fatherName) {
+            let affair = {
+                name: body.name,
+                surname: body.surname,
+                fatherName: body.fatherName
+            };
+
+            return affairs.update(ticket, affair)
+                .then(() => affairs.get(ticket))
+                .then(affair => {
+                    res.statusCode = 200;
+                    res.send(affair);
+                })
+                .catch(err => {
+                    next(err);
+                });
+        } else {
+            res.statusCode = 400;
+            let resObj = {
+                message: "Not all fields specified"
+            };
+            res.send(resObj);
+
+            return Promise.reject(resObj);
         }
     }
 
@@ -103,6 +151,7 @@ module.exports = function () {
      * @param next
      */
     function removeAffair(req, res, next) {
+        debug('Remove affair');
         let ticket = req.params.ticket;
 
         return affairs.delete(ticket)
@@ -114,6 +163,7 @@ module.exports = function () {
 
     return {
         createAffair,
+        updateAffair,
         getAffair,
         getAllAffairs,
         removeAffair

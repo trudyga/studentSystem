@@ -6,7 +6,11 @@ let reportSchema = new Schema({
         type: String,
         required: true
     },
-    link: {
+    type: {
+        type: String,
+        required: true
+    },
+    content: {
         type: String,
         required: true
     },
@@ -24,5 +28,5 @@ let reportSchema = new Schema({
     }
 });
 
-module.exports = reportSchema;
 mongoose.model('Report', reportSchema);
+module.exports = reportSchema;
